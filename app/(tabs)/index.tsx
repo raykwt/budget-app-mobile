@@ -63,10 +63,6 @@ export default function HomeScreen() {
           ))}
         </View>
       </ScrollView>
-
-      <Pressable style={styles.fab}>
-        <Plus color="#ffffff" size={24} />
-      </Pressable>
     </View>
   );
 }
@@ -152,21 +148,5 @@ const styles = StyleSheet.create({
     color: '#0f172a',
     fontFamily: 'Inter-SemiBold',
     marginBottom: 16,
-  },
-  fab: {
-    position: 'absolute',
-    bottom: 24,
-    right: 24,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: '#0891b2',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
 });

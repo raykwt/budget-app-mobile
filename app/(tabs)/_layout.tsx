@@ -1,7 +1,10 @@
 import { Tabs } from 'expo-router';
 import { Chrome as Home, ChartPie as PieChart, Calendar, Settings } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TabLayout() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tabs
       screenOptions={{
@@ -9,7 +12,7 @@ export default function TabLayout() {
           backgroundColor: '#ffffff',
           borderTopColor: '#e5e5e5',
           height: 60,
-          paddingBottom: 8,
+          paddingBottom: insets.bottom + 32,
         },
         tabBarActiveTintColor: '#0891b2',
         tabBarInactiveTintColor: '#64748b',

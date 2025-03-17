@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, Platform } from 'react-native';
-import { ChevronLeft, ChevronRight } from 'lucide-react-native';
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react-native';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth } from 'date-fns';
+import { router } from 'expo-router';
 import TransactionCard from '@/components/TransactionCard';
 
 export default function TransactionsScreen() {
@@ -14,6 +15,7 @@ export default function TransactionsScreen() {
       category: 'Food',
       description: 'Lunch at Cafe',
       date: '2025-03-15T14:30:00',
+      source: 'credit' as const,
     },
     {
       type: 'income' as const,
@@ -21,6 +23,7 @@ export default function TransactionsScreen() {
       category: 'Salary',
       description: 'Monthly Salary',
       date: '2025-03-01T09:00:00',
+      source: 'debit' as const,
     },
     {
       type: 'expense' as const,
@@ -28,6 +31,7 @@ export default function TransactionsScreen() {
       category: 'Transport',
       description: 'Uber Ride',
       date: '2025-03-10T16:45:00',
+      source: 'credit' as const,
     },
     {
       type: 'expense' as const,
@@ -35,6 +39,7 @@ export default function TransactionsScreen() {
       category: 'Shopping',
       description: 'Groceries',
       date: '2025-03-05T11:20:00',
+      source: 'cash' as const,
     },
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
@@ -81,19 +86,6 @@ export default function TransactionsScreen() {
     );
   };
 
-  // Custom icon components that handle web compatibility
-  const ChevronLeftIcon = () => (
-    <View style={Platform.select({ web: { cursor: 'pointer' } })}>
-      <ChevronLeft size={24} color="#64748b" strokeWidth={2} />
-    </View>
-  );
-
-  const ChevronRightIcon = () => (
-    <View style={Platform.select({ web: { cursor: 'pointer' } })}>
-      <ChevronRight size={24} color="#64748b" strokeWidth={2} />
-    </View>
-  );
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -104,7 +96,7 @@ export default function TransactionsScreen() {
             style={styles.monthButton} 
             onPress={() => navigateMonth('prev')}
           >
-            <ChevronLeftIcon />
+            <ChevronLeft size={24} color="#64748b" strokeWidth={2} />
           </Pressable>
           
           <Text style={styles.monthText}>
@@ -115,7 +107,7 @@ export default function TransactionsScreen() {
             style={styles.monthButton} 
             onPress={() => navigateMonth('next')}
           >
-            <ChevronRightIcon />
+            <ChevronRight size={24} color="#64748b" strokeWidth={2} />
           </Pressable>
         </View>
 
@@ -162,6 +154,9 @@ export default function TransactionsScreen() {
           </View>
         ))}
       </ScrollView>
+      <Pressable style={styles.fab} onPress={() => router.push('/transactions/add')}>
+        <Plus color="#ffffff" size={24} />
+      </Pressable>
     </View>
   );
 }
@@ -264,5 +259,21 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Medium',
     marginBottom: 12,
     marginTop: 8,
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 24,
+    right: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#0891b2',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });

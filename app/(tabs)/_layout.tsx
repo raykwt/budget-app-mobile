@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Chrome as Home, ChartPie as PieChart, Calendar, Settings } from 'lucide-react-native';
+import { Home, ChartPie as PieChart, Calendar, Settings } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TabLayout() {

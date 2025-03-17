@@ -1,52 +1,65 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, Platform } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  Platform,
+} from 'react-native';
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react-native';
-import { format, addMonths, subMonths, startOfMonth, endOfMonth } from 'date-fns';
+import {
+  format,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  endOfMonth,
+} from 'date-fns';
 import { router } from 'expo-router';
 import TransactionCard from '@/components/TransactionCard';
 
+const demoTransactions = [
+  {
+    type: 'expense' as const,
+    amount: 25.5,
+    category: 'Food',
+    description: 'Lunch at Cafe',
+    date: '2025-03-15T14:30:00',
+    source: 'credit' as const,
+  },
+  {
+    type: 'income' as const,
+    amount: 2500.0,
+    category: 'Salary',
+    description: 'Monthly Salary',
+    date: '2025-03-01T09:00:00',
+    source: 'debit' as const,
+  },
+  {
+    type: 'expense' as const,
+    amount: 45.0,
+    category: 'Transport',
+    description: 'Uber Ride',
+    date: '2025-03-10T16:45:00',
+    source: 'credit' as const,
+  },
+  {
+    type: 'expense' as const,
+    amount: 120.0,
+    category: 'Shopping',
+    description: 'Groceries',
+    date: '2025-03-05T11:20:00',
+    source: 'cash' as const,
+  },
+].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
 export default function TransactionsScreen() {
   const [selectedDate, setSelectedDate] = useState(new Date());
-
-  const transactions = [
-    {
-      type: 'expense' as const,
-      amount: 25.50,
-      category: 'Food',
-      description: 'Lunch at Cafe',
-      date: '2025-03-15T14:30:00',
-      source: 'credit' as const,
-    },
-    {
-      type: 'income' as const,
-      amount: 2500.00,
-      category: 'Salary',
-      description: 'Monthly Salary',
-      date: '2025-03-01T09:00:00',
-      source: 'debit' as const,
-    },
-    {
-      type: 'expense' as const,
-      amount: 45.00,
-      category: 'Transport',
-      description: 'Uber Ride',
-      date: '2025-03-10T16:45:00',
-      source: 'credit' as const,
-    },
-    {
-      type: 'expense' as const,
-      amount: 120.00,
-      category: 'Shopping',
-      description: 'Groceries',
-      date: '2025-03-05T11:20:00',
-      source: 'cash' as const,
-    },
-  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
+  const [transactions, setTransactions] = useState(demoTransactions);
   const monthStart = startOfMonth(selectedDate);
   const monthEnd = endOfMonth(selectedDate);
 
-  const monthlyTransactions = transactions.filter(transaction => {
+  const monthlyTransactions = transactions.filter((transaction) => {
     const transactionDate = new Date(transaction.date);
     return transactionDate >= monthStart && transactionDate <= monthEnd;
   });
@@ -66,7 +79,7 @@ export default function TransactionsScreen() {
   const netAmount = monthlyTotals.income - monthlyTotals.expenses;
 
   const navigateMonth = (direction: 'prev' | 'next') => {
-    setSelectedDate(current => 
+    setSelectedDate((current) =>
       direction === 'prev' ? subMonths(current, 1) : addMonths(current, 1)
     );
   };
@@ -81,8 +94,8 @@ export default function TransactionsScreen() {
       return acc;
     }, {} as Record<string, typeof transactions>);
 
-    return Object.entries(grouped).sort((a, b) => 
-      new Date(b[0]).getTime() - new Date(a[0]).getTime()
+    return Object.entries(grouped).sort(
+      (a, b) => new Date(b[0]).getTime() - new Date(a[0]).getTime()
     );
   };
 
@@ -90,21 +103,21 @@ export default function TransactionsScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Transactions</Text>
-        
+
         <View style={styles.monthSelector}>
-          <Pressable 
-            style={styles.monthButton} 
+          <Pressable
+            style={styles.monthButton}
             onPress={() => navigateMonth('prev')}
           >
             <ChevronLeft size={24} color="#64748b" strokeWidth={2} />
           </Pressable>
-          
+
           <Text style={styles.monthText}>
             {format(selectedDate, 'MMMM yyyy')}
           </Text>
-          
-          <Pressable 
-            style={styles.monthButton} 
+
+          <Pressable
+            style={styles.monthButton}
             onPress={() => navigateMonth('next')}
           >
             <ChevronRight size={24} color="#64748b" strokeWidth={2} />
@@ -128,10 +141,12 @@ export default function TransactionsScreen() {
           </View>
           <View style={styles.netContainer}>
             <Text style={styles.netLabel}>Net Amount</Text>
-            <Text style={[
-              styles.netValue,
-              netAmount >= 0 ? styles.positiveNet : styles.negativeNet
-            ]}>
+            <Text
+              style={[
+                styles.netValue,
+                netAmount >= 0 ? styles.positiveNet : styles.negativeNet,
+              ]}
+            >
               ${netAmount.toFixed(2)}
             </Text>
           </View>
@@ -154,7 +169,10 @@ export default function TransactionsScreen() {
           </View>
         ))}
       </ScrollView>
-      <Pressable style={styles.fab} onPress={() => router.push('/transactions/add')}>
+      <Pressable
+        style={styles.fab}
+        onPress={() => router.push('/transactions/add')}
+      >
         <Plus color="#ffffff" size={24} />
       </Pressable>
     </View>

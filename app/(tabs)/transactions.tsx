@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react-native';
+import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import {
   format,
   addMonths,
@@ -9,12 +9,12 @@ import {
   endOfMonth,
 } from 'date-fns';
 import TransactionCard from '@/components/TransactionCard';
-import { useTransactions } from '@/context/transactionsContext';
+import { Transaction, useTransactions } from '@/context/transactionsContext';
 
 export default function TransactionsScreen() {
   const { transactions: _transaction } = useTransactions();
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [transactions, setTransactions] = useState(_transaction);
+  const [transactions, setTransactions] = useState<Transaction[]>(_transaction);
   const monthStart = startOfMonth(selectedDate);
   const monthEnd = endOfMonth(selectedDate);
 

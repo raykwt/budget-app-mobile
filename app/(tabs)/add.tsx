@@ -1,13 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
-import {
-  ChevronRight,
-  Bell,
-  Lock,
-  CircleHelp as HelpCircle,
-  LogOut,
-  User,
-} from 'lucide-react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
 export default function AddTransactionScreen() {
   return (

@@ -9,12 +9,11 @@ import {
   endOfMonth,
 } from 'date-fns';
 import TransactionCard from '@/components/TransactionCard';
-import { Transaction, useTransactions } from '@/context/transactionsContext';
+import { useTransactions } from '@/context/transactionsContext';
 
 export default function TransactionsScreen() {
-  const { transactions: _transaction } = useTransactions();
+  const { transactions } = useTransactions();
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [transactions, setTransactions] = useState<Transaction[]>(_transaction);
   const monthStart = startOfMonth(selectedDate);
   const monthEnd = endOfMonth(selectedDate);
 

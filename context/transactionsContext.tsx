@@ -35,13 +35,22 @@ const demoTransactions: Transaction[] = [
   },
 ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
+export type Category =
+  | 'Food'
+  | 'Transport'
+  | 'Shopping'
+  | 'Bills'
+  | 'Salary'
+  | 'Investment';
+export type TransactionType = 'income' | 'expense';
+export type PaymentSource = 'credit' | 'debit' | 'cash';
 export type Transaction = {
-  type: 'income' | 'expense';
+  type: TransactionType;
   amount: number;
-  category: string;
+  category: Category;
   description: string;
-  date: string;
-  source: 'credit' | 'debit' | 'cash';
+  date: Date;
+  source: PaymentSource;
 };
 
 type TransactionsContextType = {
@@ -62,11 +71,13 @@ export function TransactionsProvider({
     useState<Transaction[]>(demoTransactions);
 
   const addTransaction = (transaction: Transaction) => {
-    setTransactions((prev) =>
-      [...prev, transaction].sort(
+    setTransactions((prev) => {
+      const updatedTransactions = [...prev, transaction].sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      )
-    );
+      );
+
+      return [...updatedTransactions];
+    });
   };
 
   return (

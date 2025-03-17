@@ -8,22 +8,18 @@ import {
   Pressable,
   Platform,
 } from 'react-native';
-import { router } from 'expo-router';
 import { format } from 'date-fns';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { X } from 'lucide-react-native';
-
-type Category =
-  | 'Food'
-  | 'Transport'
-  | 'Shopping'
-  | 'Bills'
-  | 'Salary'
-  | 'Investment';
-type TransactionType = 'income' | 'expense';
-type PaymentSource = 'credit' | 'debit' | 'cash';
+import {
+  Category,
+  PaymentSource,
+  TransactionType,
+  useTransactions,
+} from '@/context/transactionsContext';
 
 export default function AddTransactionScreen() {
+  const { addTransaction } = useTransactions();
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [amount, setAmount] = useState('');
@@ -50,23 +46,24 @@ export default function AddTransactionScreen() {
   };
 
   const handleSubmit = () => {
-    // Here you would typically save the transaction
-    console.log({
+    const transaction = {
       date,
       amount: parseFloat(amount),
       description,
       type,
       category,
       source,
-    });
-    router.back();
+    };
+    console.log(transaction);
+
+    addTransaction(transaction);
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Add Transaction</Text>
-        <Pressable onPress={() => router.back()} style={styles.closeButton}>
+        <Pressable onPress={() => {}} style={styles.closeButton}>
           <X size={24} color="#64748b" />
         </Pressable>
       </View>

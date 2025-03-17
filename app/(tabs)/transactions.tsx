@@ -87,26 +87,26 @@ export default function TransactionsScreen() {
             <View style={styles.summaryItem}>
               <Text style={styles.summaryLabel}>Income</Text>
               <Text style={[styles.summaryValue, styles.incomeText]}>
-                +${monthlyTotals.income.toFixed(2)}
+                ${monthlyTotals.income.toFixed(2)}
               </Text>
             </View>
             <View style={styles.summaryItem}>
               <Text style={styles.summaryLabel}>Expenses</Text>
               <Text style={[styles.summaryValue, styles.expenseText]}>
-                -${monthlyTotals.expenses.toFixed(2)}
+                ${monthlyTotals.expenses.toFixed(2)}
               </Text>
             </View>
-          </View>
-          <View style={styles.netContainer}>
-            <Text style={styles.netLabel}>Net Amount</Text>
-            <Text
-              style={[
-                styles.netValue,
-                netAmount >= 0 ? styles.positiveNet : styles.negativeNet,
-              ]}
-            >
-              ${netAmount.toFixed(2)}
-            </Text>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Net Amount</Text>
+              <Text
+                style={[
+                  styles.summaryValue,
+                  netAmount >= 0 ? styles.incomeText : styles.expenseText,
+                ]}
+              >
+                ${netAmount.toFixed(2)}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
@@ -152,8 +152,8 @@ const styles = StyleSheet.create({
   monthSelector: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 24,
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
   monthButton: {
     padding: 8,
@@ -174,7 +174,6 @@ const styles = StyleSheet.create({
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 16,
   },
   summaryItem: {
     flex: 1,
@@ -186,34 +185,13 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   summaryValue: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'Inter-SemiBold',
   },
   incomeText: {
     color: '#059669',
   },
   expenseText: {
-    color: '#dc2626',
-  },
-  netContainer: {
-    borderTopWidth: 1,
-    borderTopColor: '#e2e8f0',
-    paddingTop: 16,
-  },
-  netLabel: {
-    fontSize: 14,
-    color: '#64748b',
-    fontFamily: 'Inter-Regular',
-    marginBottom: 4,
-  },
-  netValue: {
-    fontSize: 24,
-    fontFamily: 'Inter-Bold',
-  },
-  positiveNet: {
-    color: '#059669',
-  },
-  negativeNet: {
     color: '#dc2626',
   },
   transactionsList: {

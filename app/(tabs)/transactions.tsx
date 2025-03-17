@@ -8,47 +8,13 @@ import {
   startOfMonth,
   endOfMonth,
 } from 'date-fns';
-import { router } from 'expo-router';
 import TransactionCard from '@/components/TransactionCard';
-
-const demoTransactions = [
-  {
-    type: 'expense' as const,
-    amount: 25.5,
-    category: 'Food',
-    description: 'Lunch at Cafe',
-    date: '2025-03-15T14:30:00',
-    source: 'credit' as const,
-  },
-  {
-    type: 'income' as const,
-    amount: 2500.0,
-    category: 'Salary',
-    description: 'Monthly Salary',
-    date: '2025-03-01T09:00:00',
-    source: 'debit' as const,
-  },
-  {
-    type: 'expense' as const,
-    amount: 45.0,
-    category: 'Transport',
-    description: 'Uber Ride',
-    date: '2025-03-10T16:45:00',
-    source: 'credit' as const,
-  },
-  {
-    type: 'expense' as const,
-    amount: 120.0,
-    category: 'Shopping',
-    description: 'Groceries',
-    date: '2025-03-05T11:20:00',
-    source: 'cash' as const,
-  },
-].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+import { useTransactions } from '@/context/transactionsContext';
 
 export default function TransactionsScreen() {
+  const { transactions: _transaction } = useTransactions();
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [transactions, setTransactions] = useState(demoTransactions);
+  const [transactions, setTransactions] = useState(_transaction);
   const monthStart = startOfMonth(selectedDate);
   const monthEnd = endOfMonth(selectedDate);
 

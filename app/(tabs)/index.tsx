@@ -1,36 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { Plus } from 'lucide-react-native';
 import TransactionCard from '@/components/TransactionCard';
+import { useTransactions } from '@/context/transactionsContext';
 
 export default function HomeScreen() {
-  const totalBalance = 5240.50;
-  const income = 6500.00;
-  const expenses = 1259.50;
-
-  const recentTransactions = [
-    {
-      type: 'expense' as const,
-      amount: 25.50,
-      category: 'Food',
-      description: 'Lunch at Cafe',
-      date: 'Today, 2:30 PM',
-    },
-    {
-      type: 'income' as const,
-      amount: 2500.00,
-      category: 'Salary',
-      description: 'Monthly Salary',
-      date: 'Yesterday',
-    },
-    {
-      type: 'expense' as const,
-      amount: 45.00,
-      category: 'Transport',
-      description: 'Uber Ride',
-      date: 'Yesterday',
-    },
-  ];
+  const { transactions } = useTransactions();
+  const recentTransactions = transactions.slice(0, 10);
+  const totalBalance = 5240.5;
+  const income = 6500.0;
+  const expenses = 1259.5;
 
   return (
     <View style={styles.container}>
@@ -46,12 +24,16 @@ export default function HomeScreen() {
           <View style={styles.statsContainer}>
             <View style={styles.statItem}>
               <Text style={styles.statLabel}>Income</Text>
-              <Text style={[styles.statAmount, styles.incomeText]}>+${income.toFixed(2)}</Text>
+              <Text style={[styles.statAmount, styles.incomeText]}>
+                +${income.toFixed(2)}
+              </Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
               <Text style={styles.statLabel}>Expenses</Text>
-              <Text style={[styles.statAmount, styles.expenseText]}>-${expenses.toFixed(2)}</Text>
+              <Text style={[styles.statAmount, styles.expenseText]}>
+                -${expenses.toFixed(2)}
+              </Text>
             </View>
           </View>
         </View>

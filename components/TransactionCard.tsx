@@ -1,6 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { ArrowUpRight, ArrowDownLeft, Coffee, ShoppingBag, Car, Chrome as Home, Utensils } from 'lucide-react-native';
+import {
+  ArrowUpRight,
+  ArrowDownLeft,
+  Coffee,
+  ShoppingBag,
+  Car,
+  Chrome as Home,
+  Utensils,
+} from 'lucide-react-native';
+import {
+  Category,
+  PaymentSource,
+  TransactionType,
+} from '@/context/transactionsContext';
 
 const categoryIcons: { [key: string]: React.ComponentType<any> } = {
   food: Coffee,
@@ -11,16 +24,23 @@ const categoryIcons: { [key: string]: React.ComponentType<any> } = {
 };
 
 interface TransactionCardProps {
-  type: 'income' | 'expense';
+  type: TransactionType;
   amount: number;
-  category: string;
+  category: Category;
   description: string;
-  date: string;
+  date: Date;
+  source: PaymentSource;
 }
 
-export default function TransactionCard({ type, amount, category, description, date }: TransactionCardProps) {
+export default function TransactionCard({
+  type,
+  amount,
+  category,
+  description,
+  date,
+}: TransactionCardProps) {
   const Icon = categoryIcons[category.toLowerCase()] || ShoppingBag;
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
@@ -37,11 +57,16 @@ export default function TransactionCard({ type, amount, category, description, d
           ) : (
             <ArrowDownLeft size={16} color="#dc2626" />
           )}
-          <Text style={[styles.amount, { color: type === 'income' ? '#059669' : '#dc2626' }]}>
+          <Text
+            style={[
+              styles.amount,
+              { color: type === 'income' ? '#059669' : '#dc2626' },
+            ]}
+          >
             ${amount.toFixed(2)}
           </Text>
         </View>
-        <Text style={styles.date}>{date}</Text>
+        <Text style={styles.date}>{''}</Text>
       </View>
     </View>
   );

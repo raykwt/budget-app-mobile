@@ -7,14 +7,7 @@ import {
   Plus,
 } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Pressable,
-  Platform,
-} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();

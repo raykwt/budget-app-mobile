@@ -6,7 +6,7 @@ import {
   Coffee,
   ShoppingBag,
   Car,
-  Chrome as Home,
+  Home,
   Utensils,
 } from 'lucide-react-native';
 import {
@@ -14,6 +14,7 @@ import {
   PaymentSource,
   TransactionType,
 } from '@/context/transactionsContext';
+import { format } from 'date-fns';
 
 const categoryIcons: { [key: string]: React.ComponentType<any> } = {
   food: Coffee,
@@ -66,7 +67,7 @@ export default function TransactionCard({
             ${amount.toFixed(2)}
           </Text>
         </View>
-        <Text style={styles.date}>{''}</Text>
+        <Text style={styles.date}>{format(date, 'd MMMM')}</Text>
       </View>
     </View>
   );

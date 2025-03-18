@@ -118,11 +118,7 @@ export default function TransactionsScreen() {
               {format(new Date(date), 'EEEE, MMMM d')}
             </Text>
             {transactions.map((transaction, index) => (
-              <TransactionCard
-                key={`${date}-${index}`}
-                {...transaction}
-                date={format(new Date(transaction.date), 'h:mm a')}
-              />
+              <TransactionCard key={`${date}-${index}`} {...transaction} />
             ))}
           </View>
         ))}

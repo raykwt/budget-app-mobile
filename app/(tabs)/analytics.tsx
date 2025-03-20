@@ -7,9 +7,15 @@ export const Colors = ['#0891b2', '#0ea5e9', '#38bdf8', '#7dd3fc', '#a5f3fc'];
 
 export default function AnalyticsScreen() {
   const { transactions } = useTransactions();
+  const selectedMonth = new Date();
+
+  const transactionByMonth = transactions.filter(
+    (transaction) =>
+      new Date(transaction.date).getMonth() === selectedMonth.getMonth()
+  );
 
   const getExpensesByCategory = () => {
-    const categoryMap = transactions.reduce((acc, transaction) => {
+    const categoryMap = transactionByMonth.reduce((acc, transaction) => {
       if (transaction.type === 'expense') {
         if (!acc.has(transaction.category)) {
           acc.set(transaction.category, 0);

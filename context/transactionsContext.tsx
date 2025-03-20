@@ -3,6 +3,14 @@ import { createContext, useContext, useState } from 'react';
 const demoTransactions = [
   {
     type: 'expense',
+    amount: 999.0,
+    category: 'Food',
+    description: 'Lunch at Cafe',
+    date: new Date('2025-02-15T14:30:00'),
+    source: 'credit',
+  },
+  {
+    type: 'expense',
     amount: 25.5,
     category: 'Food',
     description: 'Lunch at Cafe',

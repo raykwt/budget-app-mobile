@@ -1,8 +1,24 @@
+import { Category, useTransactions } from '@/context/transactionsContext';
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { LineChart, PieChart } from 'react-native-chart-kit';
 
 export default function AnalyticsScreen() {
+  const { transactions } = useTransactions();
+
+  const getExepensesByCategory = () => {
+    const expenses = transactions.reduce((acc, transaction) => {
+      if (!acc[transaction.category]) {
+        acc[transaction.category] = 0;
+      }
+      acc[transaction.category] += transaction.amount;
+      return acc;
+    }, {} as Record<Category, number>);
+
+    return expenses;
+  };
+
+  const expenses = getExepensesByCategory();
   const screenWidth = Dimensions.get('window').width;
 
   const lineData = {
@@ -111,15 +127,21 @@ export default function AnalyticsScreen() {
         <View style={styles.summaryCard}>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Total Income</Text>
-            <Text style={[styles.summaryValue, styles.incomeText]}>$3,500.00</Text>
+            <Text style={[styles.summaryValue, styles.incomeText]}>
+              $3,500.00
+            </Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Total Expenses</Text>
-            <Text style={[styles.summaryValue, styles.expenseText]}>$2,200.00</Text>
+            <Text style={[styles.summaryValue, styles.expenseText]}>
+              $2,200.00
+            </Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Net Savings</Text>
-            <Text style={[styles.summaryValue, styles.savingsText]}>$1,300.00</Text>
+            <Text style={[styles.summaryValue, styles.savingsText]}>
+              $1,300.00
+            </Text>
           </View>
         </View>
       </View>

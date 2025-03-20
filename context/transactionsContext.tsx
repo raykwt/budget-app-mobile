@@ -1,39 +1,49 @@
 import { createContext, useContext, useState } from 'react';
 
-const demoTransactions: Transaction[] = [
+const demoTransactions = [
   {
-    type: 'expense' as const,
+    type: 'expense',
     amount: 25.5,
     category: 'Food',
     description: 'Lunch at Cafe',
-    date: '2025-03-15T14:30:00',
-    source: 'credit' as const,
+    date: new Date('2025-03-15T14:30:00'),
+    source: 'credit',
   },
   {
-    type: 'income' as const,
+    type: 'income',
     amount: 2500.0,
     category: 'Salary',
     description: 'Monthly Salary',
-    date: '2025-03-01T09:00:00',
-    source: 'debit' as const,
+    date: new Date('2025-03-01T09:00:00'),
+    source: 'debit',
   },
   {
-    type: 'expense' as const,
+    type: 'expense',
+    amount: 3.5,
+    category: 'Food',
+    description: 'McDonalds',
+    date: new Date('2025-03-24T14:30:00'),
+    source: 'debit',
+  },
+  {
+    type: 'expense',
     amount: 45.0,
     category: 'Transport',
     description: 'Uber Ride',
-    date: '2025-03-10T16:45:00',
-    source: 'credit' as const,
+    date: new Date('2025-03-10T16:45:00'),
+    source: 'credit',
   },
   {
-    type: 'expense' as const,
+    type: 'expense',
     amount: 120.0,
     category: 'Shopping',
     description: 'Groceries',
-    date: '2025-03-05T11:20:00',
-    source: 'cash' as const,
+    date: new Date('2025-03-05T11:20:00'),
+    source: 'cash',
   },
-].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+) as Transaction[];
 
 export type Category =
   | 'Food'

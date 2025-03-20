@@ -3,22 +3,42 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { LineChart, PieChart } from 'react-native-chart-kit';
 
+export const Colors = ['#0891b2', '#0ea5e9', '#38bdf8', '#7dd3fc', '#a5f3fc'];
+
 export default function AnalyticsScreen() {
   const { transactions } = useTransactions();
 
-  const getExepensesByCategory = () => {
-    const expenses = transactions.reduce((acc, transaction) => {
-      if (!acc[transaction.category]) {
-        acc[transaction.category] = 0;
+  const getExpensesByCategory = () => {
+    const categoryMap = transactions.reduce((acc, transaction) => {
+      if (transaction.type === 'expense') {
+        if (!acc.has(transaction.category)) {
+          acc.set(transaction.category, 0);
+        }
+        acc.set(
+          transaction.category,
+          acc.get(transaction.category)! + transaction.amount
+        );
       }
-      acc[transaction.category] += transaction.amount;
       return acc;
-    }, {} as Record<Category, number>);
+    }, new Map<Category, number>());
 
-    return expenses;
+    const expensesArray = Array.from(categoryMap, ([category, amount]) => ({
+      category,
+      amount,
+    }));
+    return expensesArray;
   };
 
-  const expenses = getExepensesByCategory();
+  const expenses = getExpensesByCategory();
+  const sortedExpenses = expenses.sort((a, b) => b.amount - a.amount);
+
+  const pieData = sortedExpenses.map((item, index) => ({
+    name: item.category,
+    population: item.amount,
+    color: Colors[index % Colors.length],
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 12,
+  }));
   const screenWidth = Dimensions.get('window').width;
 
   const lineData = {
@@ -37,37 +57,6 @@ export default function AnalyticsScreen() {
     ],
     legend: ['Income', 'Expenses'],
   };
-
-  const pieData = [
-    {
-      name: 'Food',
-      population: 450,
-      color: '#0891b2',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 12,
-    },
-    {
-      name: 'Transport',
-      population: 280,
-      color: '#0ea5e9',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 12,
-    },
-    {
-      name: 'Shopping',
-      population: 520,
-      color: '#38bdf8',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 12,
-    },
-    {
-      name: 'Bills',
-      population: 720,
-      color: '#7dd3fc',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 12,
-    },
-  ];
 
   const chartConfig = {
     backgroundGradientFrom: '#ffffff',

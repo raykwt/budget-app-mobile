@@ -1,18 +1,57 @@
+import { DateHeader } from '@/components/DateHeader';
 import { Category, useTransactions } from '@/context/transactionsContext';
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import {
+  addMonths,
+  addWeeks,
+  addYears,
+  subMonths,
+  subWeeks,
+  subYears,
+} from 'date-fns';
+import { Calendar } from 'lucide-react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  Pressable,
+} from 'react-native';
 import { LineChart, PieChart } from 'react-native-chart-kit';
 
 export const Colors = ['#0891b2', '#0ea5e9', '#38bdf8', '#7dd3fc', '#a5f3fc'];
 
 export default function AnalyticsScreen() {
   const { transactions } = useTransactions();
-  const selectedMonth = new Date();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [period, setPeriod] = useState('month');
+  const [showPeriodSelector, setShowPeriodSelector] = useState(false);
 
+  console.log('selectedDate', selectedDate);
   const transactionByMonth = transactions.filter(
     (transaction) =>
-      new Date(transaction.date).getMonth() === selectedMonth.getMonth()
+      new Date(transaction.date).getMonth() === selectedDate.getMonth()
   );
+
+  const navigatePeriod = (direction: 'prev' | 'next') => {
+    setSelectedDate((current) => {
+      switch (period) {
+        case 'week':
+          return direction === 'prev'
+            ? subWeeks(current, 1)
+            : addWeeks(current, 1);
+        case 'month':
+          return direction === 'prev'
+            ? subMonths(current, 1)
+            : addMonths(current, 1);
+        case 'year':
+          return direction === 'prev'
+            ? subYears(current, 1)
+            : addYears(current, 1);
+      }
+    });
+  };
 
   const getExpensesByCategory = () => {
     const categoryMap = transactionByMonth.reduce((acc, transaction) => {
@@ -87,7 +126,73 @@ export default function AnalyticsScreen() {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Analytics</Text>
-        <Text style={styles.subtitle}>Financial Overview</Text>
+        <Pressable style={styles.periodButton} onPress={() => {}}>
+          <Calendar size={20} color="#64748b" />
+        </Pressable>
+      </View>
+      <DateHeader
+        date={selectedDate}
+        onLeftPress={() => navigatePeriod('prev')}
+        onRightPress={() => navigatePeriod('next')}
+      />
+      <View style={styles.periodSelector}>
+        <Pressable
+          style={[
+            styles.periodOption,
+            period === 'week' && styles.periodOptionActive,
+          ]}
+          onPress={() => {
+            setPeriod('week');
+            setShowPeriodSelector(false);
+          }}
+        >
+          <Text
+            style={[
+              styles.periodOptionText,
+              period === 'week' && styles.periodOptionTextActive,
+            ]}
+          >
+            Week
+          </Text>
+        </Pressable>
+        <Pressable
+          style={[
+            styles.periodOption,
+            period === 'month' && styles.periodOptionActive,
+          ]}
+          onPress={() => {
+            setPeriod('month');
+            setShowPeriodSelector(false);
+          }}
+        >
+          <Text
+            style={[
+              styles.periodOptionText,
+              period === 'month' && styles.periodOptionTextActive,
+            ]}
+          >
+            Month
+          </Text>
+        </Pressable>
+        <Pressable
+          style={[
+            styles.periodOption,
+            period === 'year' && styles.periodOptionActive,
+          ]}
+          onPress={() => {
+            setPeriod('year');
+            setShowPeriodSelector(false);
+          }}
+        >
+          <Text
+            style={[
+              styles.periodOptionText,
+              period === 'year' && styles.periodOptionTextActive,
+            ]}
+          >
+            Year
+          </Text>
+        </Pressable>
       </View>
 
       <View style={styles.card}>
@@ -153,6 +258,14 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingTop: 60,
     backgroundColor: '#ffffff',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  periodButton: {
+    padding: 8,
+    backgroundColor: '#f1f5f9',
+    borderRadius: 8,
   },
   title: {
     fontSize: 24,
@@ -227,5 +340,40 @@ const styles = StyleSheet.create({
   },
   savingsText: {
     color: '#0891b2',
+  },
+  periodSelector: {
+    flexDirection: 'row',
+    padding: 16,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e8f0',
+    gap: 8,
+  },
+  periodOption: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    backgroundColor: '#f1f5f9',
+    alignItems: 'center',
+  },
+  periodOptionActive: {
+    backgroundColor: '#0891b2',
+  },
+  periodOptionText: {
+    fontSize: 14,
+    fontFamily: 'Inter-Medium',
+    color: '#64748b',
+  },
+  periodOptionTextActive: {
+    color: '#ffffff',
+  },
+  periodNavigation: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e8f0',
   },
 });

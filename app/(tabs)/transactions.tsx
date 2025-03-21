@@ -10,6 +10,7 @@ import {
 } from 'date-fns';
 import TransactionCard from '@/components/TransactionCard';
 import { useTransactions } from '@/context/transactionsContext';
+import { DateHeader } from '@/components/DateHeader';
 
 export default function TransactionsScreen() {
   const { transactions } = useTransactions();
@@ -62,25 +63,15 @@ export default function TransactionsScreen() {
       <View style={styles.header}>
         <Text style={styles.title}>Transactions</Text>
 
-        <View style={styles.monthSelector}>
-          <Pressable
-            style={styles.monthButton}
-            onPress={() => navigateMonth('prev')}
-          >
-            <ChevronLeft size={24} color="#64748b" strokeWidth={2} />
-          </Pressable>
-
-          <Text style={styles.monthText}>
-            {format(selectedDate, 'MMMM yyyy')}
-          </Text>
-
-          <Pressable
-            style={styles.monthButton}
-            onPress={() => navigateMonth('next')}
-          >
-            <ChevronRight size={24} color="#64748b" strokeWidth={2} />
-          </Pressable>
-        </View>
+        <DateHeader
+          date={selectedDate}
+          onLeftPress={() => {
+            navigateMonth('prev');
+          }}
+          onRightPress={() => {
+            navigateMonth('next');
+          }}
+        />
 
         <View style={styles.summaryContainer}>
           <View style={styles.summaryRow}>

@@ -123,18 +123,21 @@ export default function AnalyticsScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Analytics</Text>
-        <Pressable style={styles.periodButton} onPress={() => {}}>
-          <Calendar size={20} color="#64748b" />
-        </Pressable>
+        <View style={styles.headerRow}>
+          <Text style={styles.title}>Analytics</Text>
+          <Pressable style={styles.periodButton} onPress={() => {}}>
+            <Calendar size={20} color="#64748b" />
+          </Pressable>
+        </View>
+        <DateHeader
+          date={selectedDate}
+          onLeftPress={() => navigatePeriod('prev')}
+          onRightPress={() => navigatePeriod('next')}
+        />
       </View>
-      <DateHeader
-        date={selectedDate}
-        onLeftPress={() => navigatePeriod('prev')}
-        onRightPress={() => navigatePeriod('next')}
-      />
+
       <View style={styles.periodSelector}>
         <Pressable
           style={[
@@ -194,58 +197,59 @@ export default function AnalyticsScreen() {
           </Text>
         </Pressable>
       </View>
+      <ScrollView>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Income vs Expenses</Text>
+          <LineChart
+            data={lineData}
+            width={screenWidth - 32}
+            height={220}
+            chartConfig={chartConfig}
+            bezier
+            style={styles.chart}
+          />
+        </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Income vs Expenses</Text>
-        <LineChart
-          data={lineData}
-          width={screenWidth - 32}
-          height={220}
-          chartConfig={chartConfig}
-          bezier
-          style={styles.chart}
-        />
-      </View>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Expense Distribution</Text>
+          <PieChart
+            data={pieData}
+            width={screenWidth - 32}
+            height={220}
+            chartConfig={chartConfig}
+            accessor={'population'}
+            backgroundColor={'transparent'}
+            paddingLeft={'15'}
+            center={[10, 10]}
+            absolute
+          />
+        </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Expense Distribution</Text>
-        <PieChart
-          data={pieData}
-          width={screenWidth - 32}
-          height={220}
-          chartConfig={chartConfig}
-          accessor={'population'}
-          backgroundColor={'transparent'}
-          paddingLeft={'15'}
-          center={[10, 10]}
-          absolute
-        />
-      </View>
-
-      <View style={styles.summaryContainer}>
-        <Text style={styles.summaryTitle}>Monthly Summary</Text>
-        <View style={styles.summaryCard}>
-          <View style={styles.summaryItem}>
-            <Text style={styles.summaryLabel}>Total Income</Text>
-            <Text style={[styles.summaryValue, styles.incomeText]}>
-              $3,500.00
-            </Text>
-          </View>
-          <View style={styles.summaryItem}>
-            <Text style={styles.summaryLabel}>Total Expenses</Text>
-            <Text style={[styles.summaryValue, styles.expenseText]}>
-              $2,200.00
-            </Text>
-          </View>
-          <View style={styles.summaryItem}>
-            <Text style={styles.summaryLabel}>Net Savings</Text>
-            <Text style={[styles.summaryValue, styles.savingsText]}>
-              $1,300.00
-            </Text>
+        <View style={styles.summaryContainer}>
+          <Text style={styles.summaryTitle}>Monthly Summary</Text>
+          <View style={styles.summaryCard}>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Total Income</Text>
+              <Text style={[styles.summaryValue, styles.incomeText]}>
+                $3,500.00
+              </Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Total Expenses</Text>
+              <Text style={[styles.summaryValue, styles.expenseText]}>
+                $2,200.00
+              </Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Net Savings</Text>
+              <Text style={[styles.summaryValue, styles.savingsText]}>
+                $1,300.00
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -258,9 +262,14 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingTop: 60,
     backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e8f0',
+  },
+  headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 16,
   },
   periodButton: {
     padding: 8,

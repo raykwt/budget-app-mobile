@@ -11,6 +11,8 @@ import {
 } from '@expo-google-fonts/inter';
 import { SplashScreen } from 'expo-router';
 import { TransactionsProvider } from '@/context/transactionsContext';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 export default function RootLayout() {
   useFrameworkReady();
@@ -34,12 +36,16 @@ export default function RootLayout() {
 
   return (
     <>
-      <TransactionsProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-      </TransactionsProvider>
-      <StatusBar style="auto" />
+      <GestureHandlerRootView>
+        <BottomSheetModalProvider>
+          <TransactionsProvider>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+          </TransactionsProvider>
+          <StatusBar style="auto" />
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
     </>
   );
 }

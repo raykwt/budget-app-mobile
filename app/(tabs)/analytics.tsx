@@ -19,7 +19,6 @@ import {
   Pressable,
 } from 'react-native';
 import { LineChart, PieChart } from 'react-native-chart-kit';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
   BottomSheetModal,
   BottomSheetView,
@@ -39,9 +38,6 @@ export default function AnalyticsScreen() {
     bottomSheetModalRef.current?.present();
   }, []);
 
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
   console.log('selectedDate', selectedDate);
   const transactionByMonth = transactions.filter(
     (transaction) =>
@@ -142,91 +138,86 @@ export default function AnalyticsScreen() {
   };
 
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <BottomSheetModalProvider>
-        <View style={styles.header}>
-          <View style={styles.headerRow}>
-            <Text style={styles.title}>Analytics</Text>
-            <Pressable
-              style={styles.periodButton}
-              onPress={handlePresentModalPress}
-            >
-              <Calendar size={20} color="#64748b" />
-            </Pressable>
-          </View>
-          <DateHeader
-            date={selectedDate}
-            onLeftPress={() => navigatePeriod('prev')}
-            onRightPress={() => navigatePeriod('next')}
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.headerRow}>
+          <Text style={styles.title}>Analytics</Text>
+          <Pressable
+            style={styles.periodButton}
+            onPress={handlePresentModalPress}
+          >
+            <Calendar size={20} color="#64748b" />
+          </Pressable>
+        </View>
+        <DateHeader
+          date={selectedDate}
+          onLeftPress={() => navigatePeriod('prev')}
+          onRightPress={() => navigatePeriod('next')}
+        />
+      </View>
+
+      <ScrollView>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Income vs Expenses</Text>
+          <LineChart
+            data={lineData}
+            width={screenWidth - 32}
+            height={220}
+            chartConfig={chartConfig}
+            bezier
+            style={styles.chart}
           />
         </View>
 
-        <ScrollView>
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Income vs Expenses</Text>
-            <LineChart
-              data={lineData}
-              width={screenWidth - 32}
-              height={220}
-              chartConfig={chartConfig}
-              bezier
-              style={styles.chart}
-            />
-          </View>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Expense Distribution</Text>
+          <PieChart
+            data={pieData}
+            width={screenWidth - 32}
+            height={220}
+            chartConfig={chartConfig}
+            accessor={'population'}
+            backgroundColor={'transparent'}
+            paddingLeft={'15'}
+            center={[10, 10]}
+            absolute
+          />
+        </View>
 
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Expense Distribution</Text>
-            <PieChart
-              data={pieData}
-              width={screenWidth - 32}
-              height={220}
-              chartConfig={chartConfig}
-              accessor={'population'}
-              backgroundColor={'transparent'}
-              paddingLeft={'15'}
-              center={[10, 10]}
-              absolute
-            />
-          </View>
-
-          <View style={styles.summaryContainer}>
-            <Text style={styles.summaryTitle}>Monthly Summary</Text>
-            <View style={styles.summaryCard}>
-              <View style={styles.summaryItem}>
-                <Text style={styles.summaryLabel}>Total Income</Text>
-                <Text style={[styles.summaryValue, styles.incomeText]}>
-                  $3,500.00
-                </Text>
-              </View>
-              <View style={styles.summaryItem}>
-                <Text style={styles.summaryLabel}>Total Expenses</Text>
-                <Text style={[styles.summaryValue, styles.expenseText]}>
-                  $2,200.00
-                </Text>
-              </View>
-              <View style={styles.summaryItem}>
-                <Text style={styles.summaryLabel}>Net Savings</Text>
-                <Text style={[styles.summaryValue, styles.savingsText]}>
-                  $1,300.00
-                </Text>
-              </View>
+        <View style={styles.summaryContainer}>
+          <Text style={styles.summaryTitle}>Monthly Summary</Text>
+          <View style={styles.summaryCard}>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Total Income</Text>
+              <Text style={[styles.summaryValue, styles.incomeText]}>
+                $3,500.00
+              </Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Total Expenses</Text>
+              <Text style={[styles.summaryValue, styles.expenseText]}>
+                $2,200.00
+              </Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Net Savings</Text>
+              <Text style={[styles.summaryValue, styles.savingsText]}>
+                $1,300.00
+              </Text>
             </View>
           </View>
+        </View>
 
-          <BottomSheetModal
-            ref={bottomSheetModalRef}
-            onChange={handleSheetChanges}
-          >
-            <BottomSheetView style={{ flex: 1, height: 300 }}>
-              <PeriodSelector
-                period={period}
-                onPeriodSelect={handlePeriodSelect}
-              />
-            </BottomSheetView>
-          </BottomSheetModal>
-        </ScrollView>
-      </BottomSheetModalProvider>
-    </GestureHandlerRootView>
+        <BottomSheetModal ref={bottomSheetModalRef}>
+          <BottomSheetView style={{ flex: 1, height: 300 }}>
+            <PeriodSelector
+              period={period}
+              onPeriodSelect={handlePeriodSelect}
+            />
+          </BottomSheetView>
+        </BottomSheetModal>
+      </ScrollView>
+    </View>
   );
 }
 

@@ -6,9 +6,20 @@ import { useTransactions } from '@/context/transactionsContext';
 export default function HomeScreen() {
   const { transactions } = useTransactions();
   const recentTransactions = transactions.slice(0, 10);
-  const totalBalance = 5240.5;
-  const income = 6500.0;
-  const expenses = 1259.5;
+
+  const { totalBalance, income, expenses } = transactions.reduce(
+    (acc, transaction) => {
+      if (transaction.type === 'income') {
+        acc.income += transaction.amount;
+        acc.totalBalance += transaction.amount;
+      } else if (transaction.type === 'expense') {
+        acc.expenses += transaction.amount;
+        acc.totalBalance -= transaction.amount;
+      }
+      return acc;
+    },
+    { totalBalance: 0, income: 0, expenses: 0 }
+  );
 
   return (
     <View style={styles.container}>

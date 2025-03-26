@@ -9,7 +9,7 @@ import {
   subYears,
 } from 'date-fns';
 import { Calendar } from 'lucide-react-native';
-import React, { useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -19,6 +19,12 @@ import {
   Pressable,
 } from 'react-native';
 import { LineChart, PieChart } from 'react-native-chart-kit';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import {
+  BottomSheetModal,
+  BottomSheetView,
+  BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet';
 
 export const Colors = ['#0891b2', '#0ea5e9', '#38bdf8', '#7dd3fc', '#a5f3fc'];
 
@@ -26,8 +32,15 @@ export default function AnalyticsScreen() {
   const { transactions } = useTransactions();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [period, setPeriod] = useState('month');
-  const [showPeriodSelector, setShowPeriodSelector] = useState(false);
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
   console.log('selectedDate', selectedDate);
   const transactionByMonth = transactions.filter(
     (transaction) =>
@@ -123,133 +136,146 @@ export default function AnalyticsScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerRow}>
-          <Text style={styles.title}>Analytics</Text>
-          <Pressable style={styles.periodButton} onPress={() => {}}>
-            <Calendar size={20} color="#64748b" />
-          </Pressable>
-        </View>
-        <DateHeader
-          date={selectedDate}
-          onLeftPress={() => navigatePeriod('prev')}
-          onRightPress={() => navigatePeriod('next')}
-        />
-      </View>
-
-      <View style={styles.periodSelector}>
-        <Pressable
-          style={[
-            styles.periodOption,
-            period === 'week' && styles.periodOptionActive,
-          ]}
-          onPress={() => {
-            setPeriod('week');
-            setShowPeriodSelector(false);
-          }}
-        >
-          <Text
-            style={[
-              styles.periodOptionText,
-              period === 'week' && styles.periodOptionTextActive,
-            ]}
-          >
-            Week
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[
-            styles.periodOption,
-            period === 'month' && styles.periodOptionActive,
-          ]}
-          onPress={() => {
-            setPeriod('month');
-            setShowPeriodSelector(false);
-          }}
-        >
-          <Text
-            style={[
-              styles.periodOptionText,
-              period === 'month' && styles.periodOptionTextActive,
-            ]}
-          >
-            Month
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[
-            styles.periodOption,
-            period === 'year' && styles.periodOptionActive,
-          ]}
-          onPress={() => {
-            setPeriod('year');
-            setShowPeriodSelector(false);
-          }}
-        >
-          <Text
-            style={[
-              styles.periodOptionText,
-              period === 'year' && styles.periodOptionTextActive,
-            ]}
-          >
-            Year
-          </Text>
-        </Pressable>
-      </View>
-      <ScrollView>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Income vs Expenses</Text>
-          <LineChart
-            data={lineData}
-            width={screenWidth - 32}
-            height={220}
-            chartConfig={chartConfig}
-            bezier
-            style={styles.chart}
+    <GestureHandlerRootView style={styles.container}>
+      <BottomSheetModalProvider>
+        <View style={styles.header}>
+          <View style={styles.headerRow}>
+            <Text style={styles.title}>Analytics</Text>
+            <Pressable
+              style={styles.periodButton}
+              onPress={handlePresentModalPress}
+            >
+              <Calendar size={20} color="#64748b" />
+            </Pressable>
+          </View>
+          <DateHeader
+            date={selectedDate}
+            onLeftPress={() => navigatePeriod('prev')}
+            onRightPress={() => navigatePeriod('next')}
           />
         </View>
 
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Expense Distribution</Text>
-          <PieChart
-            data={pieData}
-            width={screenWidth - 32}
-            height={220}
-            chartConfig={chartConfig}
-            accessor={'population'}
-            backgroundColor={'transparent'}
-            paddingLeft={'15'}
-            center={[10, 10]}
-            absolute
-          />
-        </View>
+        <ScrollView>
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Income vs Expenses</Text>
+            <LineChart
+              data={lineData}
+              width={screenWidth - 32}
+              height={220}
+              chartConfig={chartConfig}
+              bezier
+              style={styles.chart}
+            />
+          </View>
 
-        <View style={styles.summaryContainer}>
-          <Text style={styles.summaryTitle}>Monthly Summary</Text>
-          <View style={styles.summaryCard}>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Total Income</Text>
-              <Text style={[styles.summaryValue, styles.incomeText]}>
-                $3,500.00
-              </Text>
-            </View>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Total Expenses</Text>
-              <Text style={[styles.summaryValue, styles.expenseText]}>
-                $2,200.00
-              </Text>
-            </View>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Net Savings</Text>
-              <Text style={[styles.summaryValue, styles.savingsText]}>
-                $1,300.00
-              </Text>
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Expense Distribution</Text>
+            <PieChart
+              data={pieData}
+              width={screenWidth - 32}
+              height={220}
+              chartConfig={chartConfig}
+              accessor={'population'}
+              backgroundColor={'transparent'}
+              paddingLeft={'15'}
+              center={[10, 10]}
+              absolute
+            />
+          </View>
+
+          <View style={styles.summaryContainer}>
+            <Text style={styles.summaryTitle}>Monthly Summary</Text>
+            <View style={styles.summaryCard}>
+              <View style={styles.summaryItem}>
+                <Text style={styles.summaryLabel}>Total Income</Text>
+                <Text style={[styles.summaryValue, styles.incomeText]}>
+                  $3,500.00
+                </Text>
+              </View>
+              <View style={styles.summaryItem}>
+                <Text style={styles.summaryLabel}>Total Expenses</Text>
+                <Text style={[styles.summaryValue, styles.expenseText]}>
+                  $2,200.00
+                </Text>
+              </View>
+              <View style={styles.summaryItem}>
+                <Text style={styles.summaryLabel}>Net Savings</Text>
+                <Text style={[styles.summaryValue, styles.savingsText]}>
+                  $1,300.00
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
-    </View>
+
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            onChange={handleSheetChanges}
+          >
+            <BottomSheetView style={{ flex: 1 }}>
+              <View style={styles.periodSelector}>
+                <Pressable
+                  style={[
+                    styles.periodOption,
+                    period === 'week' && styles.periodOptionActive,
+                  ]}
+                  onPress={() => {
+                    setPeriod('week');
+                    bottomSheetModalRef.current?.dismiss();
+                  }}
+                >
+                  <Text
+                    style={[
+                      styles.periodOptionText,
+                      period === 'week' && styles.periodOptionTextActive,
+                    ]}
+                  >
+                    Week
+                  </Text>
+                </Pressable>
+                <Pressable
+                  style={[
+                    styles.periodOption,
+                    period === 'month' && styles.periodOptionActive,
+                  ]}
+                  onPress={() => {
+                    setPeriod('month');
+                    bottomSheetModalRef.current?.dismiss();
+                  }}
+                >
+                  <Text
+                    style={[
+                      styles.periodOptionText,
+                      period === 'month' && styles.periodOptionTextActive,
+                    ]}
+                  >
+                    Month
+                  </Text>
+                </Pressable>
+                <Pressable
+                  style={[
+                    styles.periodOption,
+                    period === 'year' && styles.periodOptionActive,
+                  ]}
+                  onPress={() => {
+                    setPeriod('year');
+                    bottomSheetModalRef.current?.dismiss();
+                  }}
+                >
+                  <Text
+                    style={[
+                      styles.periodOptionText,
+                      period === 'year' && styles.periodOptionTextActive,
+                    ]}
+                  >
+                    Year
+                  </Text>
+                </Pressable>
+              </View>
+            </BottomSheetView>
+          </BottomSheetModal>
+        </ScrollView>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 }
 

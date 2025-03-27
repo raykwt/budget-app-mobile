@@ -6,7 +6,7 @@ const demoTransactions = [
     amount: 999.0,
     category: 'Food',
     description: 'Lunch at Cafe',
-    date: new Date('2025-02-15T14:30:00'),
+    date: '2025-02-15',
     source: 'credit',
   },
   {
@@ -14,7 +14,7 @@ const demoTransactions = [
     amount: 25.5,
     category: 'Food',
     description: 'Lunch at Cafe',
-    date: new Date('2025-03-15T14:30:00'),
+    date: '2025-03-15',
     source: 'credit',
   },
   {
@@ -22,7 +22,7 @@ const demoTransactions = [
     amount: 2500.0,
     category: 'Salary',
     description: 'Monthly Salary',
-    date: new Date('2025-03-01T09:00:00'),
+    date: '2025-03-01',
     source: 'debit',
   },
   {
@@ -30,7 +30,7 @@ const demoTransactions = [
     amount: 3.5,
     category: 'Food',
     description: 'McDonalds',
-    date: new Date('2025-03-24T14:30:00'),
+    date: '2025-03-24',
     source: 'debit',
   },
   {
@@ -38,7 +38,7 @@ const demoTransactions = [
     amount: 45.0,
     category: 'Transport',
     description: 'Uber Ride',
-    date: new Date('2025-03-10T16:45:00'),
+    date: '2025-03-10',
     source: 'credit',
   },
   {
@@ -46,7 +46,7 @@ const demoTransactions = [
     amount: 120.0,
     category: 'Shopping',
     description: 'Groceries',
-    date: new Date('2025-03-05T11:20:00'),
+    date: '2025-03-05',
     source: 'cash',
   },
 ].sort(
@@ -67,7 +67,7 @@ export type Transaction = {
   amount: number;
   category: Category;
   description: string;
-  date: Date;
+  date: string;
   source: PaymentSource;
 };
 

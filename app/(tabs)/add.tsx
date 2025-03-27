@@ -47,7 +47,7 @@ export default function AddTransactionScreen() {
 
   const handleSubmit = () => {
     const transaction = {
-      date,
+      date: format(date, 'yyyy-MM-dd'),
       amount: parseFloat(amount),
       description,
       type,
@@ -123,8 +123,8 @@ export default function AddTransactionScreen() {
           {Platform.OS === 'ios' ? (
             <DateTimePicker
               value={date}
-              mode="datetime"
-              display="spinner"
+              mode="date"
+              display="default"
               onChange={handleDateChange}
               style={styles.datePickerIOS}
             />
@@ -141,7 +141,7 @@ export default function AddTransactionScreen() {
               {showDatePicker && (
                 <DateTimePicker
                   value={date}
-                  mode="datetime"
+                  mode="date"
                   onChange={handleDateChange}
                 />
               )}

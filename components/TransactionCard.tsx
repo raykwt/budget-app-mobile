@@ -12,6 +12,7 @@ import {
 import {
   Category,
   PaymentSource,
+  Transaction,
   TransactionType,
 } from '@/context/transactionsContext';
 import { format } from 'date-fns';
@@ -24,22 +25,13 @@ const categoryIcons: { [key: string]: React.ComponentType<any> } = {
   dining: Utensils,
 };
 
-interface TransactionCardProps {
-  type: TransactionType;
-  amount: number;
-  category: Category;
-  description: string;
-  date: Date;
-  source: PaymentSource;
-}
-
 export default function TransactionCard({
   type,
   amount,
   category,
   description,
   date,
-}: TransactionCardProps) {
+}: Transaction) {
   const Icon = categoryIcons[category.toLowerCase()] || ShoppingBag;
 
   return (

@@ -19,11 +19,7 @@ import {
   Pressable,
 } from 'react-native';
 import { LineChart, PieChart } from 'react-native-chart-kit';
-import {
-  BottomSheetModal,
-  BottomSheetView,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import PeriodSelector from '@/components/PeriodSelector';
 
 export const Colors = ['#0891b2', '#0ea5e9', '#38bdf8', '#7dd3fc', '#a5f3fc'];

@@ -1,25 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import TransactionCard from '@/components/TransactionCard';
 import { useTransactions } from '@/context/transactionsContext';
+import { useTransactionSummary } from '@/hooks/useTransactionSummary';
 
 export default function HomeScreen() {
   const { transactions } = useTransactions();
   const recentTransactions = transactions.slice(0, 10);
-
-  const { totalBalance, income, expenses } = transactions.reduce(
-    (acc, transaction) => {
-      if (transaction.type === 'income') {
-        acc.income += transaction.amount;
-        acc.totalBalance += transaction.amount;
-      } else if (transaction.type === 'expense') {
-        acc.expenses += transaction.amount;
-        acc.totalBalance -= transaction.amount;
-      }
-      return acc;
-    },
-    { totalBalance: 0, income: 0, expenses: 0 }
-  );
+  const { totalBalance, income, expenses } = useTransactionSummary();
 
   return (
     <View style={styles.container}>

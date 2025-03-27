@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { ChevronLeft, ChevronRight } from 'lucide-react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import {
   format,
   addMonths,
